@@ -1,0 +1,1834 @@
+openapi: 3.0.0
+
+servers:
+  - url: http://localhost8080
+  
+info:
+  description: Contract API For The Skill-Matrix Application. This API contains all the neccessary endpoints for CRUD operations based on project requirements. In a nutshell, the application for which this API was created, contains all the active employees currently working for SoftwareONE. The purpose of this application is to aggregate all employees in one place so that any manager can access and contact any employee based on skills and other criterias.
+  version: "1.0.0"
+  title: Skill-Matrix API 
+  contact:
+    email: zourab.lavrentiadis@softwareone.com
+  license:
+    name: SoftwareONE
+    url: 'http://www.softwareone.com'
+   
+tags:
+  - name: user
+    description: User Operations
+  - name: skill
+    description: Skill Operations
+  - name: skill-level
+    description: skill-level Operations
+  - name: language
+    description: Language Operations
+  - name: language-level
+    description: Language-level Operations
+  - name: job-title
+    description: Job-title Operations
+  - name: department
+    description: Department Operations
+  - name: category
+    description: Category Operations
+  - name: location
+    description: Location Operations
+  
+paths:
+#user
+  /user:
+    get:
+      tags:
+        - user
+      summary: fetch all users from the database
+      operationId: getUsers
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+    
+    post:
+      tags:
+        - user
+      summary: add a user to the database
+      operationId: addUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        201:
+           description: created
+           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+  
+
+  /user/{userId}/skill:
+    get:
+      tags:
+        - user
+      summary: fetch skills of a single user from the database
+      operationId: getUserSkills
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/userSkillInputArray'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+          
+    post:
+      tags:
+        - user
+      summary: add one or multiple skills to the user
+      operationId: addUserSkill
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userSkillInputArray'
+      responses:
+        201:
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userSkillInputArray'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+    
+    put:
+      tags:
+        - user
+      summary: update one or multiple skills of a user
+      operationId: updateUserSkill
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userSkillInputArray'
+      responses:
+        201:
+          description: created
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server  
+          
+  /user/{userId}/skill/{skillId}:
+    delete:
+      tags:
+        - user
+      summary: delete a user skill by id
+      operationId: deleteUserSkill
+      parameters:
+      - in: path
+        name: userId 
+        required: true
+        schema:
+          type: integer
+      - in: path
+        name: skillId
+        required: true
+        schema:
+          type: integer
+      responses:
+        201:
+          description: deleted
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server        
+  
+  
+  /user/{userId}/language:
+    get:
+      tags:
+        - user
+      summary: fetch languages of a single user from the database
+      operationId: getUserLanguages
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/userLanguageInputArray'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+          
+    post:
+      tags:
+        - user
+      summary: add one or multiple languages to the user
+      operationId: addUserLanguage
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userLanguageInputArray'
+      responses:
+        201:
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userLanguageInputArray'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+    
+    put:
+      tags:
+        - user
+      summary: update one or multiple languages of a user
+      operationId: updateUserLanguage
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LanguageInput'
+      responses:
+        201:
+          description: created
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server  
+  
+  /user/{userId}/language/{languageId}:
+    delete:
+      tags:
+        - user
+      summary: delete a user language by id
+      operationId: deleteUserLanguage
+      parameters:
+      - in: path
+        name: userId 
+        required: true
+        schema:
+          type: integer
+      - in: path
+        name: languageId
+        required: true
+        schema:
+          type: integer
+      responses:
+        201:
+          description: deleted
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server 
+  
+  /user/{userId}/personalInfo:
+    get:
+      tags:
+        - user
+      summary: fetch personal information of a user from the database
+      operationId: getUserPersonalInfo
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/userPersonalInfo'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+          
+    post:
+      tags:
+        - user
+      summary: add personal information to a single user
+      operationId: addUserPersonalInfo
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userPersonalInfo'
+      responses:
+        201:
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userPersonalInfo'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+    
+    put:
+      tags:
+        - user
+      summary: update user's personal information
+      operationId: updateUserPersonalInfo
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userPersonalInfo'
+      responses:
+        201:
+          description: created
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server  
+  
+  /user/{userId}/personalInfo/{personalInfoId}:
+    delete:
+      tags:
+        - user
+      summary: delete a user's personal info by id
+      operationId: deleteUserPersonalInfo
+      parameters:
+      - in: path
+        name: userId 
+        required: true
+        schema:
+          type: integer
+      - in: path
+        name: personalInfoId
+        required: true
+        schema:
+          type: integer
+      responses:
+        201:
+          description: deleted
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server 
+  
+  /user/{userId}:
+    get:
+      tags:
+        - user
+      summary: find user by id
+      operationId: getUserById
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+  
+    put:
+      tags:
+        - user
+      summary: update a user by id
+      operationId: updateUser
+      parameters:
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/User'
+      responses:
+        201:
+          description: created
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server  
+          
+    delete:
+      tags:
+        - user
+      summary: delete a user by id
+      operationId: deleteUser
+      parameters:
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: integer
+      responses:
+        201:
+          description: deleted
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server  
+  
+  
+  /user/findBySkill:
+    get:
+      tags:
+      - user
+      summary: find users by skill
+      operationId: findUsersBySkill
+      parameters:
+      - name: skill
+        in: query
+        description: skill values that need to be considered for filter
+        required: true
+        schema: 
+          type: array
+          items:
+            type: string
+            enum:
+            -  java
+            -  javascript
+            -  python
+            default:  java
+      responses:
+         200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+         4XX:
+          description: problem caused by the user
+         5XX:
+          description: problem caused by the server
+
+
+  /user/findByLocation:
+    get:
+      tags:
+      - user
+      summary: find users by location
+      operationId: findUsersByLocation
+      parameters:
+      - name: location
+        in: query
+        description: location values that need to be considered for filter
+        required: true
+        schema: 
+          type: array
+          items:
+            type: string
+            enum:
+            -  leipzig
+            -  frankfurt
+            -  athens
+            default: leipzig
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server
+     
+          
+  /user/findByCategory:
+    get:
+      tags:
+      - user
+      summary: find users by skill category
+      operationId: findUsersBySkillCategory
+      parameters:
+      - name: skill-category
+        in: query
+        description: location values that need to be considered for filter
+        required: true
+        schema: 
+          type: array
+          items:
+            type: string
+            enum:
+            - framework
+            - cloud
+            - programming
+            default: framework
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server
+     
+          
+  /user/findBySkillAndSkillLevel:
+    get:
+      tags:
+      - user
+      summary: find users by skill and skill level
+      operationId: findUsersBySkillAndSkillLevel
+      parameters:
+      - name: skill
+        in: query
+        description: Skill values that need to be considered for filter
+        required: true
+        schema: 
+          type: array
+          items:
+            type: string
+            enum:
+            -  java
+            -  javascript
+            -  python
+            default: java
+            
+      - name: skill-level
+        in: query
+        description: Skill level values that need to be considered for filter
+        required: true
+        schema: 
+          type: array
+          items:
+            type: string
+            enum:
+            -  beginner
+            -  intermediate
+            -  expert
+            default: expert
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server     
+  
+  
+  /user/findByLanguageAndLanguageLevel:
+    get:
+      tags:
+      - user
+      summary: find users by language and language level
+      operationId: findUsersByLanguageAndLanguageLevel
+      parameters:
+      - name: language
+        in: query
+        description: language values that need to be considered for filter
+        required: true
+        schema: 
+          type: array
+          items:
+            type: string
+            enum:
+            -  english
+            -  german
+            -  greek
+            default: greek
+            
+      - name: language-level
+        in: query
+        description: language-level values that need to be considered for filter
+        required: true
+        schema: 
+          type: array
+          items:
+            type: string
+            enum:
+            -  a1
+            -  a2
+            -  b1
+            -  b2
+            -  c1
+            -  c2
+            default: c2
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+    
+          
+  /user/findByJobTitle:
+    get:
+      tags:
+      - user
+      summary: find users by job-title
+      operationId: findUsersByJobTitle
+      parameters:
+      - name: job-title
+        in: query
+        description: job-title values that need to be considered for filter
+        required: true
+        schema: 
+          type: array
+          items:
+            type: string
+            enum:
+            -  developer
+            -  manager
+            -  administrator
+            default: developer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+  
+  
+  /user/findByDepartment:
+    get:
+      tags:
+      - user
+      summary: find users by department
+      operationId: findUsersByDepartment
+      parameters:
+      - name: department
+        in: query
+        description: department values that need to be considered for filter
+        required: true
+        schema: 
+          type: array
+          items:
+            type: string
+            enum:
+            - application
+            - sales
+            - marketing 
+            default: application
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+  
+      
+ #skill
+  /skill:
+    get:
+      tags:
+        - skill
+      summary: fetch all skills from the database
+      operationId: getSkills
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Skill'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+  
+    post:
+      tags:
+        - skill
+      summary: Add a skill to the database
+      operationId: addSkill
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Skill'
+      responses:
+        201:
+           description: skill created
+           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+    
+    put:
+      tags:
+        - skill
+      summary: update a skill by id
+      operationId: updateSkill
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/Skill'
+      responses:
+        201:
+          description: created
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server  
+  
+  /skill/{skillId}:
+    get:
+      tags:
+        - skill
+      summary: find a skill by id
+      operationId: getSkillById
+      parameters:
+        - name: skillId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server  
+          
+    delete:
+      tags:
+        - skill
+      summary: delete a skill by id
+      operationId: deleteSkill
+      parameters:
+      - in: path
+        name: skillId
+        required: true
+        schema:
+          type: integer
+      responses:
+        201:
+          description: skill deleted
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server  
+ 
+          
+ #skill-level
+  /skill-level:
+    get:
+      tags:
+        - skill-level
+      summary: fetch all skill levels from the database
+      operationId: getSkillLevel
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SkillLevel'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server  
+
+    post:
+      tags:
+        - skill-level
+      summary: add a skill level to the database
+      operationId: addSkillLevel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillLevel'
+      responses:
+        201:
+           description: created
+           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkillLevel'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server  
+      
+     
+  /skill-level/{skill-levelId}:
+    put:
+      tags:
+        - skill-level
+      summary: update a skill level
+      operationId: updateSkillLevel
+      parameters:
+      - in: path
+        name: skill-levelId
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/SkillLevel'
+      responses:
+        201:
+          description: created
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+          
+    delete:
+      tags:
+        - skill-level
+      summary: delete a skill-level
+      operationId: deleteSkillLevel
+      parameters:
+      - in: path
+        name: skill-levelId
+        required: true
+        schema:
+          type: integer
+      responses:
+        201:
+          description: skill-level deleted
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+          
+
+ #language
+  /language:
+    get:
+      tags:
+        - language
+      summary: fetch all languages from the database
+      operationId: getLanguages
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Language'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server
+
+    post:
+      tags:
+        - language
+      summary: add a language to the database
+      operationId: addLanguage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Language'
+      responses:
+        201:
+           description: created
+           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Language'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server
+  
+  
+  /language/{languageId}:
+    get:
+      tags:
+        - language
+      summary: find language by id
+      operationId: getLanguageById
+      parameters:
+        - name: languageId
+          in: path
+          description: id of language to return
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Language'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server
+ 
+    put:
+      tags:
+        - language
+      summary: update a language by id
+      operationId: updateLanguage
+      parameters:
+      - in: path
+        name: languageId
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/Language'
+      responses:
+        201:
+          description: created
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server
+          
+    delete:
+      tags:
+        - language
+      summary: delete a language by id
+      operationId: deleteLanguage
+      parameters:
+      - in: path
+        name: languageId
+        required: true
+        schema:
+          type: integer
+      responses:
+        201:
+          description: deleted
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server  
+        
+
+ #language-level
+  /language-level:
+    get:
+      tags:
+        - language-level
+      summary: fetch all language levels from the database
+      operationId: getLanguageLevel
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LanguageLevel'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server  
+
+    post:
+      tags:
+        - language-level
+      summary: add a language level to the database
+      operationId: addLanguageLevel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LanguageLevel'
+      responses:
+        201:
+           description: created
+           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LanguageLevel'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server  
+  
+  
+  /language-level/{language-levelId}:
+    put:
+      tags:
+        - language-level
+      summary: update a language level
+      operationId: updateLanguageLevel
+      parameters:
+      - in: path
+        name: language-levelId
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/LanguageLevel'
+      responses:
+        201:
+          description: created
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server  
+          
+    delete:
+      tags:
+        - language-level
+      summary: delete a language-level
+      operationId: deleteLanguageLevel
+      parameters:
+      - in: path
+        name: language-levelId
+        required: true
+        schema:
+          type: integer
+      responses:
+        201:
+          description: deleted
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server    
+
+
+ #job-title
+  /job-title:
+    get:
+      tags:
+        - job-title
+      summary: fetch all job-titles from the database
+      operationId: getJobTitles
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobTitle'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+  
+    post:
+      tags:
+        - job-title
+      summary: add a job-title to the database
+      operationId: addJobTitle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobTitle'
+      responses:
+        201:
+           description: created
+           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobTitle'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+  
+  
+  /job-title/{job-titleId}:
+    get:
+      tags:
+        - job-title
+      summary: find job-title by id
+      operationId: getJobTitleById
+      parameters:
+        - name: job-titleId
+          in: path
+          description: id of job-title to return
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobTitle'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+ 
+    put:
+      tags:
+        - job-title
+      summary: update a job-title
+      operationId: updateJobTitle
+      parameters:
+      - in: path
+        name: job-titleId
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/JobTitle'
+      responses:
+        201:
+          description: created
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+          
+    delete:
+      tags:
+        - job-title
+      summary: delete a job-title by id
+      operationId: deleteJobTitle
+      parameters:
+      - in: path
+        name: job-titleId
+        required: true
+        schema:
+          type: integer
+      responses:
+        201:
+          description: deleted
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server      
+
+
+ #department
+  /department:
+    get:
+      tags:
+        - department
+      summary: fetch all departments from the database
+      operationId: getDepartments
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Department'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+  
+    post:
+      tags:
+        - department
+      summary: add a department to the database
+      operationId: addDepartment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Department'
+      responses:
+        201:
+           description: created
+           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Department'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+  
+  
+  /department/{departmentId}:
+    get:
+      tags:
+        - department
+      summary: find a department by id
+      operationId: getDepartmentById
+      parameters:
+        - name: departmentId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Department'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+  
+    put:
+      tags:
+        - department
+      summary: update a department by id
+      operationId: updateDepartment
+      parameters:
+      - in: path
+        name: departmentId
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/Department'
+      responses:
+        201:
+          description: item created
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server   
+          
+    delete:
+      tags:
+        - department
+      summary: delete a department by id
+      operationId: deleteDepartment
+      parameters:
+      - in: path
+        name: departmentId
+        required: true
+        schema:
+          type: integer
+      responses:
+        201:
+          description: deleted
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server      
+
+
+ #category
+  /category:
+    get:
+      tags:
+        - category
+      summary: fetch all categories from the database
+      operationId: getSkillCategory
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server      
+
+    post:
+      tags:
+        - category
+      summary: add a category to the database
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        201:
+           description: created
+           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server    
+  
+  
+  /category/{categoryId}:
+    get:
+      tags:
+        - category
+      summary: find category by id
+      operationId: getCategoryById
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server    
+   
+    put:
+      tags:
+        - category
+      summary: update a category by id
+      operationId: updateCategory
+      parameters:
+      - in: path
+        name: categoryId
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/Category'
+      responses:
+        201:
+          description: created
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server    
+          
+    delete:
+      tags:
+        - category
+      summary: delete a category by id
+      operationId: deleteCategory
+      parameters:
+      - in: path
+        name: categoryId
+        required: true
+        schema:
+          type: integer
+      responses:
+        201:
+          description: deleted
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server  
+
+
+ #location
+  /location:
+    get:
+      tags:
+        - location
+      summary: fetch all locations from the database
+      operationId: getLocation
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Location'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server  
+
+    post:
+      tags:
+        - location
+      summary: add a location to the database
+      operationId: addLocation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+      responses:
+        201:
+           description: created
+           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server
+  
+  
+  /location/{locationId}:
+    get:
+      tags:
+        - location
+      summary: find location by id
+      operationId: getLocationById
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server
+   
+    put:
+      tags:
+        - location
+      summary: update a location by id
+      operationId: updateLocation
+      parameters:
+      - in: path
+        name: locationId
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/Location'
+      responses:
+        201:
+          description: created
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server 
+          
+    delete:
+      tags:
+        - location
+      summary: delete a location by id
+      operationId: deleteLocation
+      parameters:
+      - in: path
+        name: locationId
+        required: true
+        schema:
+          type: integer
+      responses:
+        201:
+          description: deleted
+        4XX:
+          description: problem caused by the user
+        5XX:
+          description: problem caused by the server  
+
+
+#OBJECTS
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - mobileNumber
+        - location
+        - aboutMe
+        - birthDate
+        - jobTitle
+        - department
+        - skills
+        - languages
+      properties:
+        userId:
+          type: integer
+          example: 1
+        firstName:
+          type: string
+          example: elon 
+        lastName:
+          type: string
+          example: musk
+        email:
+          type: string
+          example: elon-musk@gmail.com
+        mobileNumber:
+          type: integer
+          example: 017621505142
+        location: 
+          type: string
+          example: leipzig
+        aboutMe:
+          type: string
+          example: java developer from Leipzig
+        birthDate:
+          type: string
+          format: date-time
+          example: '2016-08-29'
+        skills:
+          type: array
+          items:
+           $ref: '#/components/schemas/UserSkill'
+        languages:
+          type: array
+          items:
+           $ref: '#/components/schemas/UserLanguage'
+    
+    
+    userSkillInputArray:
+        type: array
+        items:
+            $ref: '#/components/schemas/skillInput'
+            
+    skillInput:
+        type: object
+        properties:
+          skillId:
+            type: integer
+            example: 1
+          skillLevel:
+            type: integer
+            example: 1
+          categoryId:
+            type: integer
+            example: 1
+            
+    LanguageInput:
+        type: object
+        properties:
+          languageId:
+            type: integer
+            example: 1
+          languageLevel:
+            type: integer
+            example: 1
+            
+    userLanguageInputArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/LanguageInput'
+    
+    userPersonalInfo:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+        - mobileNumber
+        - location
+        - aboutMe
+        - birthDate
+        - jobTitle
+        - department
+      properties:
+        firstName:
+          type: string
+          example: elon 
+        lastName:
+          type: string
+          example: musk
+        email:
+          type: string
+          example: elon-musk@gmail.com
+        mobileNumber:
+          type: integer
+          example: 017621505142
+        location: 
+          type: string
+          example: leipzig
+        aboutMe:
+          type: string
+          example: java developer from Leipzig
+        birthDate:
+          type: string
+          format: date-time
+          example: '2016-08-29'
+ 
+    UserSkill:
+      type: object
+      required:
+        - skillId
+        - skillLevel
+        - category
+      properties:
+        skillLevel:
+          type: integer
+          example: 1
+        skill:
+          $ref: '#/components/schemas/Skill'
+        category:
+          $ref: '#/components/schemas/Category'
+    
+    Skill:
+      type: object
+      properties:
+        skillId:
+          type: integer
+          example: 1
+        skillName:
+          type: string
+          example: java
+    
+    SkillLevel:
+      type: object
+      properties:
+        SkillLevelId:
+          type: integer
+          example: 1
+        skillLevel:
+          type: string
+          enum:
+            - beginner
+            - intermediate
+            - expert
+            
+    UserLanguage:
+      type: object
+      required:
+        - languageLevel
+        - language
+      properties:
+        languageLevel:
+          type: integer
+          example: 1
+        language:
+          $ref: '#/components/schemas/Language'
+        
+    Language:
+      type: object
+      properties:
+        languageId:
+          type: integer
+          example: 1
+        languageName:
+          type: string
+          enum:
+            - english
+            - german
+            - greek
+            
+    LanguageLevel:
+      type: object
+      properties:
+        LanguageLevelId:
+          type: integer
+          example: 1
+        languageLevel:
+          type: string
+          enum:
+            - a1
+            - a2
+            - b1
+            - b2
+            - c1
+            - c2
+            
+    JobTitle:
+      type: object
+      properties:
+        jobTitleId:
+          type: integer
+          example: 1
+        jobTitle:
+          type: string
+          enum:
+            -  developer
+            -  manager
+            -  administrator 
+            
+    Department:
+      type: object
+      properties:
+        departmentId:
+          type: integer
+          example: 1
+        department:
+          type: string
+          enum:
+            - application
+            - sales
+            - marketing  
+            
+    Category:
+      type: object
+      properties:
+        categoryId:
+          type: integer
+          example: 1
+        categoryName:
+          type: string
+          enum:
+            - framework
+            - cloud
+            - programming
+            
+    Location:
+      type: object
+      properties:
+        locationId:
+          type: integer
+          example: 1
+        location:
+          type: string
+          enum:
+            - leipzig
+            - frankfurt
+            - athens
